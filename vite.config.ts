@@ -11,7 +11,7 @@ export default defineConfig({
       manifest: {
         name: "おさんぽビンゴ",
         short_name: "おさんぽビンゴ",
-        description: "街で見つけものをするビンゴ",
+        description: "街で見つけたものでビンゴ",
         lang: "ja",
         theme_color: "#e85d9b",
         background_color: "#fffdf5",

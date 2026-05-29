@@ -3,7 +3,7 @@
 [![CI](https://github.com/hazymoon/osanpo-bingo/actions/workflows/ci.yml/badge.svg)](https://github.com/hazymoon/osanpo-bingo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-街で見つけものをする、幼児向けの「おさんぽビンゴ」。散歩中に親子で遊ぶPWAです。
+街で見つけたものでビンゴをする、幼児向けの「おさんぽビンゴ」。散歩中に親子で遊ぶPWAです。
 バス停・黄色い車・犬・マンホール…といったお題をタップで消していき、縦横斜めが揃うとビンゴ。
 字が読めない子でも遊べるよう、絵が主役・タップで名前を読み上げます。
 
