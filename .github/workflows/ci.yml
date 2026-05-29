@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# 最小権限。チェックは読み取りのみで足りる
+permissions:
+  contents: read
+
+# 同一ブランチ/PR の古い実行はキャンセルして無駄なCI時間を省く
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # mise.toml の Node 22 / pnpm 10 をそのまま導入（ローカルとCIでツール版を一致させる）
+      - uses: jdx/mise-action@v2
+      - run: pnpm install --frozen-lockfile
+      - run: mise run lint
+      - run: mise run typecheck
+      - run: mise run format-check
+      - run: mise run build

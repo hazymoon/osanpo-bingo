@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # pnpm-lock.yaml も npm エコシステムで解析される
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # 開発依存はまとめて1PRにし、レビュー負荷とPRノイズを下げる
+      dev-dependencies:
+        dependency-type: "development"
+    ignore:
+      # tsgo は日次の dev プレビュー版。バージョンは差分確認のうえ手動で上げる方針（CLAUDE.md）
+      - dependency-name: "@typescript/native-preview"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
