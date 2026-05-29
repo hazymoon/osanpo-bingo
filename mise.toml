@@ -9,7 +9,7 @@
 
 [tools]
 node = "22" # LTS。Vite 6 / React 19 の動作前提
-pnpm = "10" # 推奨パッケージマネージャ（npm/yarn ではなく pnpm を使う）
+pnpm = "11" # 推奨パッケージマネージャ（npm/yarn ではなく pnpm を使う）
 
 [env]
 # PWA の動作確認・カメラ(v1.x)は HTTPS かつ localhost が前提。

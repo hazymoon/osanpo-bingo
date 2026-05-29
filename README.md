@@ -13,7 +13,7 @@
 
 ## 必要環境
 
-- [mise](https://mise.jdx.dev/)（Node 22 / pnpm 10 を固定管理）
+- [mise](https://mise.jdx.dev/)（Node 22 / pnpm 11 を固定管理）
 - モダンブラウザ。PWAインストール・カメラ(将来)は HTTPS または localhost が前提
 - 読み上げは Web Speech API（ja-JP 音声の有無は OS 依存）
 
