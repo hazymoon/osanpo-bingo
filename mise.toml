@@ -1,0 +1,48 @@
+# 実行に関わる前提条件をここに集約する。
+#   $ mise install        # 下記ツールを一括導入
+#   $ mise run setup      # 依存インストール
+#   $ mise run dev        # 開発サーバ
+#
+# パッケージマネージャは pnpm を推奨（高速・ディスク効率・厳密な依存解決）。
+# 型チェック=tsgo / 整形=oxfmt / 静的解析=oxlint（新世代ツールに寄せている。詳細はCLAUDE.md）。
+# mise が node と pnpm のバージョンを固定するので、ローカル環境差を排除できる。
+
+[tools]
+node = "22" # LTS。Vite 6 / React 19 の動作前提
+pnpm = "10" # 推奨パッケージマネージャ（npm/yarn ではなく pnpm を使う）
+
+[env]
+# PWA の動作確認・カメラ(v1.x)は HTTPS かつ localhost が前提。
+# `vite preview --host` で LAN 内の実機（スマホ）から確認できる。
+
+[tasks.setup]
+description = "依存をインストール"
+run = "pnpm install"
+
+[tasks.dev]
+description = "開発サーバを起動"
+run = "pnpm dev"
+
+[tasks.typecheck]
+description = "tsgo で型チェックのみ（emitはViteが担当）"
+run = "pnpm typecheck"
+
+[tasks.build]
+description = "tsgo型チェック + Viteビルド（dist/ を生成）"
+run = "pnpm build"
+
+[tasks.preview]
+description = "ビルド結果を実機確認（--host でLAN公開）"
+run = "pnpm preview"
+
+[tasks.lint]
+description = "oxlint で静的解析"
+run = "pnpm lint"
+
+[tasks.format]
+description = "oxfmt でその場整形"
+run = "pnpm format"
+
+[tasks.format-check]
+description = "oxfmt で整形チェック（CI向け）"
+run = "pnpm format:check"
