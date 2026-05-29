@@ -1,0 +1,19 @@
+name: 機能リクエスト・改善提案
+description: ほしい機能やアイデアを提案する
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: 提案内容
+      description: どんな機能・改善がほしいですか？
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 背景・理由
+      description: どんな場面で困っている／あると嬉しいですか？
+    validations:
+      required: false

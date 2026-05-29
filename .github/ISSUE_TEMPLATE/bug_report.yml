@@ -1,0 +1,42 @@
+name: バグ報告
+description: うまく動かない・おかしい挙動を報告する
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。再現できるよう、わかる範囲で記入してください。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 何が起きましたか？
+      description: 起きたことと、期待していた動作を書いてください。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      placeholder: |
+        1. ○○の画面で
+        2. ○○をタップすると
+        3. ○○になる
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 環境
+      description: 使っている端末・ブラウザ（複数選択可）
+      multiple: true
+      options:
+        - iOS (Safari)
+        - iOS (Chrome)
+        - Android (Chrome)
+        - PC (Chrome)
+        - PC (Firefox)
+        - PC (Safari)
+        - その他
+    validations:
+      required: false
