@@ -18,7 +18,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # mise.toml の Node 22 / pnpm 10 をそのまま導入（ローカルとCIでツール版を一致させる）
       - uses: jdx/mise-action@v2
       - run: pnpm install --frozen-lockfile
