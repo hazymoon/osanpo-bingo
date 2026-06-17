@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { RefreshCw, Settings, Volume2, VolumeX } from "lucide-react";
+import { Music, RefreshCw, Settings, Speech } from "lucide-react";
 import { CATALOG, TILE_COLORS } from "./catalog";
 import { buildLines, centerIndex, winningCells } from "./bingo";
 import { shuffle } from "./random";
 import { speak } from "./speech";
+import { playBingo, playMark } from "./sound";
 import { load, save } from "./storage";
 import type { CatalogItem } from "./types";
 import { Tile } from "./components/Tile";
@@ -27,6 +28,7 @@ export default function App() {
   const [size, setSize] = useState(saved.current?.size ?? 3);
   const [freeCenter, setFreeCenter] = useState(saved.current?.freeCenter ?? true);
   const [readAloud, setReadAloud] = useState(saved.current?.readAloud ?? true);
+  const [sound, setSound] = useState(saved.current?.sound ?? true);
   const [showSettings, setShowSettings] = useState(false);
 
   const [cardIds, setCardIds] = useState<string[]>(saved.current?.cardIds ?? []);
@@ -69,8 +71,8 @@ export default function App() {
 
   // 永続化（散歩の中断・再開に対応）
   useEffect(() => {
-    save({ size, freeCenter, readAloud, cardIds, marked: [...marked] });
-  }, [size, freeCenter, readAloud, cardIds, marked]);
+    save({ size, freeCenter, readAloud, sound, cardIds, marked: [...marked] });
+  }, [size, freeCenter, readAloud, sound, cardIds, marked]);
 
   const wins = useMemo(() => winningCells(lines, marked), [lines, marked]);
 
@@ -78,9 +80,12 @@ export default function App() {
     if (wins.size > 0 && !celebrated) {
       setCelebrated(true);
       setShowWin(true);
-      speak("ビンゴ！", readAloud);
+      playBingo(sound);
+      // ビンゴ音と重ならないよう読み上げを遅延（排他）
+      const id = setTimeout(() => speak("ビンゴ！", readAloud), 700);
+      return () => clearTimeout(id);
     }
-  }, [wins, celebrated, readAloud]);
+  }, [wins, celebrated, readAloud, sound]);
 
   const toggle = useCallback(
     (idx: number) => {
@@ -91,12 +96,13 @@ export default function App() {
           next.delete(idx);
         } else {
           next.add(idx);
+          playMark(sound);
           speak(card[idx]?.name ?? "", readAloud);
         }
         return next;
       });
     },
-    [freeCenter, center, card, readAloud],
+    [freeCenter, center, card, readAloud, sound],
   );
 
   return (
@@ -106,11 +112,21 @@ export default function App() {
         <div className="ob-actions">
           <button
             type="button"
-            className="ob-iconbtn"
+            className={`ob-iconbtn ${readAloud ? "" : "off"}`}
             onClick={() => setReadAloud((v) => !v)}
             aria-label="よみあげ"
+            aria-pressed={readAloud}
           >
-            {readAloud ? <Volume2 size={22} /> : <VolumeX size={22} />}
+            <Speech size={22} />
+          </button>
+          <button
+            type="button"
+            className={`ob-iconbtn ${sound ? "" : "off"}`}
+            onClick={() => setSound((v) => !v)}
+            aria-label="おと"
+            aria-pressed={sound}
+          >
+            <Music size={22} />
           </button>
           <button
             type="button"
@@ -151,9 +167,11 @@ export default function App() {
           size={size}
           freeCenter={freeCenter}
           readAloud={readAloud}
+          sound={sound}
           onSize={setSize}
           onFreeCenter={setFreeCenter}
           onReadAloud={setReadAloud}
+          onSound={setSound}
           onNewCard={newCard}
           onClose={() => setShowSettings(false)}
         />

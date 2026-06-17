@@ -77,6 +77,14 @@ body {
   box-shadow: 0 0 0 var(--ink);
 }
 
+/* オフ状態: 前面の白ボタンに対し、沈んだグレーで「切」を示す */
+.ob-iconbtn.off {
+  color: #b8b0a4;
+  background: #efe9e0;
+  border-color: #cdc5b8;
+  box-shadow: none;
+}
+
 .ob-grid {
   width: 100%;
   max-width: 560px;
