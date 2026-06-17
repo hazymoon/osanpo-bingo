@@ -4,9 +4,11 @@ interface SettingsSheetProps {
   size: number;
   freeCenter: boolean;
   readAloud: boolean;
+  sound: boolean;
   onSize: (n: number) => void;
   onFreeCenter: (v: boolean) => void;
   onReadAloud: (v: boolean) => void;
+  onSound: (v: boolean) => void;
   onNewCard: () => void;
   onClose: () => void;
 }
@@ -15,9 +17,11 @@ export function SettingsSheet({
   size,
   freeCenter,
   readAloud,
+  sound,
   onSize,
   onFreeCenter,
   onReadAloud,
+  onSound,
   onNewCard,
   onClose,
 }: SettingsSheetProps) {
@@ -66,6 +70,18 @@ export function SettingsSheet({
             className={`ob-toggle ${readAloud ? "on" : ""}`}
             onClick={() => onReadAloud(!readAloud)}
             aria-pressed={readAloud}
+          >
+            <span className="ob-knob" />
+          </button>
+        </div>
+
+        <div className="ob-set-row">
+          <span>おと</span>
+          <button
+            type="button"
+            className={`ob-toggle ${sound ? "on" : ""}`}
+            onClick={() => onSound(!sound)}
+            aria-pressed={sound}
           >
             <span className="ob-knob" />
           </button>

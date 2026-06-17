@@ -10,6 +10,7 @@ export interface Persisted {
   size: number;
   freeCenter: boolean;
   readAloud: boolean;
+  sound: boolean;
   cardIds: string[];
   marked: number[];
 }
