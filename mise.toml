@@ -8,7 +8,7 @@
 # mise が node と pnpm のバージョンを固定するので、ローカル環境差を排除できる。
 
 [tools]
-node = "22" # LTS。Vite 6 / React 19 の動作前提
+node = "22" # LTS。Vite 8 / React 19 の動作前提
 pnpm = "11" # 推奨パッケージマネージャ（npm/yarn ではなく pnpm を使う）
 
 [env]
