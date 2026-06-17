@@ -1,0 +1,23 @@
+# Git フック定義（lefthook）。
+# pnpm の prepare スクリプト（= lefthook install）で .git/hooks に配線される。
+# 手元のチェックを CI（.github/workflows/ci.yml）と一致させ、CI 失敗の往復を減らすのが目的。
+
+# コミット時：軽量・高頻度なチェックだけ（テンポを落とさない）
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: pnpm lint
+    format:
+      run: pnpm format:check
+
+# プッシュ時：重い検査（型・テスト・ビルド）をまとめて
+pre-push:
+  parallel: true
+  commands:
+    typecheck:
+      run: pnpm typecheck
+    test:
+      run: pnpm test
+    build:
+      run: pnpm build

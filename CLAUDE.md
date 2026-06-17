@@ -33,7 +33,17 @@ mise run build      # tsgo型チェック + Viteビルド(dist/)
 mise run preview    # 実機確認（--host でLAN公開）
 mise run lint       # oxlint
 mise run format     # oxfmt（その場整形）
+mise run test       # vitest（純関数のユニットテスト）
 ```
+
+### Git フック（lefthook）
+
+`lefthook.yml` で定義。`pnpm install` の `prepare` で `.git/hooks` に自動配線される（手動配線は `pnpm exec lefthook install`）。CI と同じチェックを手元に前倒しして往復を減らすのが目的。
+
+- **pre-commit**: `lint` + `format:check`（軽量・高頻度）
+- **pre-push**: `typecheck` + `test` + `build`（重い検査）
+
+緊急時の一時スキップは `LEFTHOOK=0 git commit ...` または `git commit --no-verify`。
 
 ## ディレクトリと役割
 
