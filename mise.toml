@@ -35,6 +35,10 @@ run = "pnpm build"
 description = "ビルド結果を実機確認（--host でLAN公開）"
 run = "pnpm preview"
 
+[tasks.test]
+description = "vitest でユニットテスト（純関数）"
+run = "pnpm test"
+
 [tasks.lint]
 description = "oxlint で静的解析"
 run = "pnpm lint"

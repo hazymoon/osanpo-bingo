@@ -1,8 +1,13 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  // 純関数のユニットテスト（bingo.ts / random.ts）。DOM不要なので node 環境で十分軽量。
+  test: {
+    environment: "node",
+  },
   plugins: [
     react(),
     VitePWA({

@@ -25,4 +25,5 @@ jobs:
       - run: mise run lint
       - run: mise run typecheck
       - run: mise run format-check
+      - run: mise run test
       - run: mise run build
