@@ -2,8 +2,7 @@ minimumReleaseAge: 0
 confirmModulesPurge: false
 allowBuilds:
   esbuild: true
-
-# lefthook の postinstall（自動フック導入）は実行しない（無視を明示して警告も抑止）。
-# フック配線は package.json の prepare（= lefthook install）で行う。
-ignoredBuiltDependencies:
-  - lefthook
+  # lefthook の postinstall を許可（未承認だと CI の pnpm が ERR_PNPM_IGNORED_BUILDS で落ちる）。
+  # 中身は「自動 lefthook install」だけで CI 環境では自己スキップするため副作用はない。
+  # 実際のフック配線は package.json の prepare（= lefthook install）が担う。
+  lefthook: true
