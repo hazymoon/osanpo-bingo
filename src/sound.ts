@@ -6,15 +6,20 @@ let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
-  if (!ctx) {
-    const w = window as Window & { webkitAudioContext?: typeof AudioContext };
-    const AC = window.AudioContext ?? w.webkitAudioContext;
-    if (!AC) return null;
-    ctx = new AC();
+  // 構築や resume が投げても「使えない環境では黙って無視する」方針を守る（speech.ts と同様）
+  try {
+    if (!ctx) {
+      const w = window as Window & { webkitAudioContext?: typeof AudioContext };
+      const AC = window.AudioContext ?? w.webkitAudioContext;
+      if (!AC) return null;
+      ctx = new AC();
+    }
+    // iOS: ユーザー操作内で resume する必要がある（音はタップ起点なので解錠される）
+    if (ctx.state === "suspended") void ctx.resume().catch(() => {});
+    return ctx;
+  } catch {
+    return null;
   }
-  // iOS: ユーザー操作内で resume する必要がある（音はタップ起点なので解錠される）
-  if (ctx.state === "suspended") void ctx.resume();
-  return ctx;
 }
 
 /** 単音を鳴らす内部ヘルパ（周波数・長さ・開始オフセット秒・波形・音量）。 */

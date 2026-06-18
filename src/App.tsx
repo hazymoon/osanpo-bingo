@@ -35,12 +35,16 @@ export default function App() {
   const [marked, setMarked] = useState<Set<number>>(new Set(saved.current?.marked ?? []));
   const [celebrated, setCelebrated] = useState(false);
   const [showWin, setShowWin] = useState(false);
+  // 保留中のビンゴ読み上げタイマー。celebrated 更新によるエフェクト再実行で
+  // 消えないよう ref に退避し、アンマウント・新カード時のみ破棄する
+  const bingoSpeechTimer = useRef<number | undefined>(undefined);
 
   const center = useMemo(() => centerIndex(size), [size]);
   const lines = useMemo(() => buildLines(size), [size]);
   const card = useMemo(() => buildCard(cardIds), [cardIds]);
 
   const newCard = useCallback(() => {
+    clearTimeout(bingoSpeechTimer.current);
     const n = size * size;
     const ids = shuffle(CATALOG)
       .slice(0, n)
@@ -81,28 +85,35 @@ export default function App() {
       setCelebrated(true);
       setShowWin(true);
       playBingo(sound);
-      // ビンゴ音と重ならないよう読み上げを遅延（排他）
-      const id = setTimeout(() => speak("ビンゴ！", readAloud), 700);
-      return () => clearTimeout(id);
+      // ビンゴ音と重ならないよう読み上げを遅延（排他）。タイマーは ref に逃がし、
+      // この直後の setCelebrated による再実行ではクリアしない（読み上げを残す）
+      bingoSpeechTimer.current = window.setTimeout(() => speak("ビンゴ！", readAloud), 700);
     }
   }, [wins, celebrated, readAloud, sound]);
+
+  // アンマウント時に保留中のビンゴ読み上げを破棄
+  useEffect(() => () => clearTimeout(bingoSpeechTimer.current), []);
 
   const toggle = useCallback(
     (idx: number) => {
       if (freeCenter && idx === center) return;
+      const willMark = !marked.has(idx);
       setMarked((prev) => {
         const next = new Set(prev);
         if (next.has(idx)) {
           next.delete(idx);
         } else {
           next.add(idx);
-          playMark(sound);
-          speak(card[idx]?.name ?? "", readAloud);
         }
         return next;
       });
+      // 副作用は updater の外で（updater は純粋に保つ。タップ起点なので iOS でも解錠される）
+      if (willMark) {
+        playMark(sound);
+        speak(card[idx]?.name ?? "", readAloud);
+      }
     },
-    [freeCenter, center, card, readAloud, sound],
+    [freeCenter, center, card, marked, readAloud, sound],
   );
 
   return (
